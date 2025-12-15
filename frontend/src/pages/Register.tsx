@@ -49,7 +49,8 @@ export default function RegistrationForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center px-4">
+    <Card className="w-full max-w-md" >
       <CardHeader>
         <CardTitle>Crea un account</CardTitle>
         <CardDescription>Inserisci i tuoi dati per registrarti</CardDescription>
@@ -217,12 +218,13 @@ export default function RegistrationForm() {
 
           <p className="text-center text-sm text-gray-600">
             Hai già un account?{" "}
-            <a href="#" className="text-blue-600 hover:underline">
+            <a href="/login" className="text-blue-600 hover:underline">
               Accedi
             </a>
           </p>
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 }

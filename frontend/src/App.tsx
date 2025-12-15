@@ -6,19 +6,20 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import Header from "./components/Header";
+import HeroSection from "./components/HeroSection";
 const App: React.FC = () => {
+  
+  const hideHeader = ["/login", "/register"];
+  
+  const hide = hideHeader.includes(location.pathname);
+  
   return (
-    <div style={{ padding: 20 }}>
-      <nav style={{ marginBottom: 20 }}>
-        <Link to="/login" style={{ marginRight: 10 }}>
-          Login
-        </Link>
-        <Link to="/register" style={{ marginRight: 10 }}>
-          Register
-        </Link>
-        <Link to="/dashboard">Dashboard</Link>
-      </nav>
+    <>
+
+      {!hide && <Header />}
       <Routes>
+        <Route path="/" element={<HeroSection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
@@ -29,11 +30,8 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
-
-        <Route path="*" element={<Login />} />
       </Routes>
-    </div>
+    </>
   );
 };
-
 export default App;
