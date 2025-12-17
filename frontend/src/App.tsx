@@ -5,23 +5,22 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import JobForm from "./pages/JobForm.tsx";
 import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
 const App: React.FC = () => {
-  
   const hideHeader = ["/login", "/register"];
-  
+
   const hide = hideHeader.includes(location.pathname);
-  
+
   return (
     <>
-
       {!hide && <Header />}
       <Routes>
         <Route path="/" element={<HeroSection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/Quiz" element={<JobForm />} />
         <Route
           path="/dashboard"
           element={

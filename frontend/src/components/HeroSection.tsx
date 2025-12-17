@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Play } from "lucide-react";
 
 export default function HeroSection() {
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const navigate = useNavigate();
   return (
     <section
       className="relative min-h-[90vh] flex flex-col items-center justify-start pt-20 px-6"
@@ -22,7 +24,7 @@ export default function HeroSection() {
           Noi di MeritumLab faremo in modo che il MERITO sia sempre al primo
           posto.
         </p>
-        <button className="px-8 py-4 bg-yellow-400 text-black rounded-full hover:bg-yellow-500 transition-colors shadow-lg">
+        <button  onClick={() => navigate("/Quiz")} className="px-8 py-4 bg-yellow-400 text-black rounded-full hover:bg-yellow-500 transition-colors shadow-lg">
           INIZIA SUBITO!
         </button>
       </div>
