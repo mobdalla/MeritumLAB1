@@ -3,13 +3,13 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
 export class AuthService {
-  static async register(email: string, password: string, phone: number) {
+  static async register(email: string, password: string, phone: number, nome: string, congnome: string) {
     const exists = await User.findOne({ email });
     if (exists) throw new Error("User already exists");
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ email, password: hashed, phone });
+    const user = await User.create({ email, password: hashed, phone, nome, congnome });
     return user;
   }
 

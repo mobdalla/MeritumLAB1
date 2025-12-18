@@ -2,6 +2,8 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { IQuiz } from "./Quiz";
 export interface IUser extends Document {
+  nome: String;
+  cognome: String;
   email: String;
   password: String;
   phone: String;
@@ -9,6 +11,8 @@ export interface IUser extends Document {
   score?: number;
 }
 const userSchema = new Schema<IUser>({
+  nome: String,
+  cognome: String,
   email: String,
   password: String,
   phone: String,
