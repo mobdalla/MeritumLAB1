@@ -58,6 +58,9 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
+import { useNavigate } from "react-router-dom";
+import { api } from "../api";
+
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -69,7 +72,7 @@ import {
   CardTitle,
 } from "../components/ui/card";
 
-interface Login {
+interface LoginForm {
   email: string;
   password: string;
 }
@@ -77,12 +80,31 @@ interface Login {
 export function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
+  const [error, setError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginForm>();
+  const navigate = useNavigate();
 
+  const onSubmit = async (e: LoginForm) => {
+    try {
+      const data = await api<{ token: string }>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: e.email,
+          password: e.password,
+        }),
+      });
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+    } catch (err: any) {
+      setError(err?.message ?? "Errore login");
+    }
+  };
+
+  /*
   const onSubmit = async (data: LoginForm) => {
     try {
       console.log("Login:", data);
@@ -95,7 +117,7 @@ export function Login() {
       toast.error("Credenziali non valide");
     }
   };
-
+*/
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
