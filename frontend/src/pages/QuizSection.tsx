@@ -38,7 +38,7 @@ export function QuizSection({
           <QuizItem
             key={question.id}
             question={question}
-            questionNumber={sectionNumber === 1 ? index + 1 : index + 51}
+            questionNumber={sectionNumber === 1 ? index + 1 : index + 18}
             register={register}
             error={errors[question.id]?.message as string}
           />

@@ -136,7 +136,7 @@ export function Login() {
               <Input
                 id="email"
                 type="email"
-                placeholder="mario.rossi@example.com"
+                //placeholder="mario.rossi@example.com"
                 {...register("email", {
                   required: "L'email è obbligatoria",
                   pattern: {
@@ -159,7 +159,7 @@ export function Login() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
+                  // placeholder="••••••••"
                   {...register("password", {
                     required: "La password è obbligatoria",
                   })}
@@ -191,6 +191,29 @@ export function Login() {
               {isSubmitting ? "Accesso in corso..." : "Accedi"}
             </Button>
 
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                window.location.href =
+                  "http://localhost:8080/oauth2/authorization/google";
+              }}
+            >
+              Accedi con Google
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                window.location.href =
+                  "http://localhost:8080/oauth2/authorization/facebook";
+              }}
+            >
+              Accedi con Facebook
+            </Button>
             <p className="text-center text-sm text-gray-600">
               Non hai un account?{" "}
               <a href="/register" className="text-blue-600 hover:underline">

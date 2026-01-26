@@ -82,10 +82,7 @@ export default function RegistrationForm() {
         <CardHeader>
           <CardTitle>Crea un account</CardTitle>
           <CardDescription>
-            Sei una Azienda Registrati{" "}
-            <a href="/registerAz" className="text-blue-600 hover:underline">
-              qui
-            </a>
+            Inserisci i tuoi dati per registrarti
           </CardDescription>
         </CardHeader>
 
@@ -125,6 +122,21 @@ export default function RegistrationForm() {
                   </p>
                 )}
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="NomeSocieta">Nome Societa</Label>
+              <Input
+                id="NomeSocieta"
+                {...register("NomeSocieta", {
+                  required: "IL nome Della Societa e obbligatorio",
+                })}
+                className={errors.NomeSocieta ? "border-red-500" : ""}
+              />
+              {errors.NomeSocieta && (
+                <p className="text-sm text-red-500">
+                  {errors.NomeSocieta.message}
+                </p>
+              )}
             </div>
             {/* EMAIL */}
             <div className="space-y-2">

@@ -6,12 +6,13 @@ import { ProgressBar } from "../components/ProgressBar";
 import {
   section1Questions,
   section2Questions,
+  Domande,
 } from "../components/data/Questions.tsx";
 
 type FormData = Record<string, string>;
 
 export default function JobForm() {
-  const [currentSection, setCurrentSection] = useState<1 | 2>(1);
+  const [currentSection, setCurrentSection] = useState<1 | 2 | 3>(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const {
@@ -30,19 +31,63 @@ export default function JobForm() {
   ).length;
   const progressPercentage = (answeredQuestions / totalQuestions) * 100;
 
-  const onSubmit = (data: FormData) => {
-    console.log("Dati inviati:", data);
-    setIsSubmitted(true);
-    // Qui puoi gestire l'invio dei dati
+  const onSubmit = async (data: FormData) => {
+    console.log("Dati ricevuti dal form:", data);
+
+    // Trasforma i dati nel formato richiesto
+    const payload = Object.entries(data)
+      .map(([key, value]) => {
+        // Estrai l'ID numerico dalla chiave (rimuovi la "q" se presente)
+        const id = key.startsWith("q") ? Number(key.substring(1)) : Number(key);
+
+        return {
+          valoreText: value ?? "",
+          domanda: { id: id },
+        };
+      })
+      .filter((item) => item.valoreText !== "" && item.valoreText !== null) // Rimuovi vuoti
+      .sort((a, b) => a.domanda.id - b.domanda.id); // Ordina per ID
+
+    console.log("Payload formattato:", payload);
+    console.log("JSON da inviare:", JSON.stringify(payload, null, 2));
+
+    try {
+      const url =
+        "http://localhost:8081/api/form-submit/create?form_id=1&settore_id=LOGISTICA&user_id=1";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Errore invio risposte: ${text}`);
+      }
+
+      console.log("Risposte inviate con successo!");
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error("Errore fetch:", err);
+      alert("Errore durante l'invio. Riprova.");
+    }
   };
 
-  const goToNextSection = () => {
-    setCurrentSection(2);
+  const goToNextSection = (numero: number) => {
+    if (numero === 1) {
+      setCurrentSection(2);
+    } else if (numero === 2) {
+      setCurrentSection(3);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const goToPreviousSection = () => {
-    setCurrentSection(1);
+    if (currentSection === 2) {
+      setCurrentSection(1);
+    } else if (currentSection === 3) {
+      setCurrentSection(2);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -81,11 +126,13 @@ export default function JobForm() {
       <div className="p-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-gray-900">Sezione {currentSection} di 2</h2>
+            <h2 className="text-gray-900">Sezione {currentSection} di 3</h2>
             <p className="text-gray-500">
               {currentSection === 1
                 ? "Informazioni Personali e Preferenze lavorative"
-                : "Esperienze generali nel settore"}
+                : currentSection === 2
+                  ? "Esperienze generali nel settore"
+                  : "Competenze specifiche"}
             </p>
           </div>
           <div className="flex gap-2">
@@ -111,6 +158,17 @@ export default function JobForm() {
             >
               Sez. 2
             </button>
+            <button
+              type="button"
+              onClick={() => setCurrentSection(3)}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                currentSection === 3
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Sez. 3
+            </button>
           </div>
         </div>
 
@@ -122,12 +180,19 @@ export default function JobForm() {
               errors={errors}
               sectionNumber={1}
             />
+          ) : currentSection === 2 ? (
+            <QuizSection
+              questions={Domande}
+              register={register}
+              errors={errors}
+              sectionNumber={2}
+            />
           ) : (
             <QuizSection
               questions={section2Questions}
               register={register}
               errors={errors}
-              sectionNumber={2}
+              sectionNumber={3}
             />
           )}
 
@@ -152,10 +217,10 @@ export default function JobForm() {
               </p>
             </div>
 
-            {currentSection === 1 ? (
+            {currentSection === 1 || currentSection === 2 ? (
               <button
                 type="button"
-                onClick={goToNextSection}
+                onClick={() => goToNextSection(currentSection)}
                 className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 Successivo

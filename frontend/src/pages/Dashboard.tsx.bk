@@ -58,6 +58,53 @@ const Dashboard: React.FC = () => {
     <div style={{ maxWidth: 720 }}>
       <h2>Dashboard</h2>
       <button onClick={logout}>Logout</button>
+
+      <section style={{ marginTop: 20 }}>
+        <h3>Il tuo profilo</h3>
+        <p>
+          <strong>Email:</strong> {me?.email}
+        </p>
+        <p>
+          <strong>Score:</strong> {me?.score ?? "non ancora"}
+        </p>
+
+        <h4>Quiz assegnato</h4>
+        {me?.quiz ? (
+          typeof me.quiz === "string" ? (
+            <p>Quiz ID: {me.quiz}</p>
+          ) : (
+            <>
+              <p>
+                <strong>{(me.quiz as IQuiz).title}</strong>
+              </p>
+              <p>{(me.quiz as IQuiz).description}</p>
+            </>
+          )
+        ) : (
+          <p>Nessun quiz assegnato</p>
+        )}
+      </section>
+
+      <section style={{ marginTop: 20 }}>
+        <h4>Assegna un quiz (simulazione)</h4>
+        <input
+          placeholder="quizId"
+          value={assignQuizId}
+          onChange={(e) => setAssignQuizId(e.target.value)}
+        />
+        <button onClick={assignQuiz}>Assegna</button>
+      </section>
+
+      <section style={{ marginTop: 20 }}>
+        <h4>Registra punteggio</h4>
+        <input
+          type="number"
+          placeholder="score"
+          value={scoreInput}
+          onChange={(e) => setScoreInput(Number(e.target.value))}
+        />
+        <button onClick={saveScore}>Salva score</button>
+      </section>
     </div>
   );
 };
