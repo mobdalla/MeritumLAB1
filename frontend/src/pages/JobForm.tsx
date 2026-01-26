@@ -66,6 +66,8 @@ export default function JobForm() {
       }
 
       console.log("Risposte inviate con successo!");
+      reset(); // ← qui cancella tutti i campi
+      setCurrentSection(1); // opzionale: torna alla prima sezione
       setIsSubmitted(true);
     } catch (err) {
       console.error("Errore fetch:", err);
