@@ -1,0 +1,25 @@
+il comando per runnare la app -> npm run dev
+
+
+
+
+
+26/01 attivita svolta;
+  - modificato fetch delle risposte cosi da poter mandare al nostro Server
+  - aggiunto al backend in java la classi User
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cosa da fare ancora;
+ - Logica dei voti 
+ - Controllo che tutto vada come programmato 

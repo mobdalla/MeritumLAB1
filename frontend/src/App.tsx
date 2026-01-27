@@ -3,6 +3,7 @@ import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import RegisterAz from "./pages/RegisterAz";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import JobForm from "./pages/JobForm.tsx";
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Route path="/" element={<HeroSection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/registerAz" element={<RegisterAz />} />
         <Route path="/Quiz" element={<JobForm />} />
         <Route
           path="/dashboard"
