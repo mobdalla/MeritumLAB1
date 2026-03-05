@@ -7,19 +7,19 @@ import {
   FirstCluster,
   SecondoCluster,
   TerzoCluster,
+  NonoCluster,
+} from "../components/data/Questions.tsx";
+import {
   QuartoCluster,
   QuintoCluster,
   SestoCluster,
   SettimoCluster,
-  OttavoCluster,
-  NonoCluster,
-} from "../components/data/Questions.tsx";
-
+} from "../components/data/QuestionsR.tsx";
 type FormData = Record<string, string>;
 
 export default function JobForm() {
   const [currentSection, setCurrentSection] = useState<
-    1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+    1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
   >(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -50,7 +50,6 @@ export default function JobForm() {
       QuintoCluster,
       SestoCluster,
       SettimoCluster,
-      OttavoCluster,
       NonoCluster,
     ];
 
@@ -62,13 +61,12 @@ export default function JobForm() {
   };
 
   const onSubmit = async (data: FormData) => {
-    const userId = localStorage.getItem("userId");
-    const AziendaId = localStorage.getItem("aziendaId");
-
     console.log("Dati ricevuti dal form:", data);
 
-    const risposte = Object.entries(data)
+    // Trasforma i dati nel formato richiesto
+    const payload = Object.entries(data)
       .map(([key, value]) => {
+        // Estrai l'ID numerico dalla chiave (rimuovi la "q" se presente)
         const id = key.startsWith("q") ? Number(key.substring(1)) : Number(key);
 
         return {
@@ -76,55 +74,36 @@ export default function JobForm() {
           domanda: { id: id },
         };
       })
-      .filter((item) => item.valoreText !== "")
-      .sort((a, b) => a.domanda.id - b.domanda.id);
+      .filter((item) => item.valoreText !== "" && item.valoreText !== null) // Rimuovi vuoti
+      .sort((a, b) => a.domanda.id - b.domanda.id); // Ordina per ID
 
-    const role = localStorage.getItem("role");
-    const email = localStorage.getItem("email");
-
-    let UserUrl = "";
-    let requestBody: any = {};
-
-    if (role === "candidato") {
-      UserUrl = "http://localhost:8081/api/form-submit/create";
-
-      requestBody = {
-        formId: 1,
-        email: email,
-        userId: userId,
-        settoreId: "LOGISTICA",
-        risposte: risposte,
-      };
-    } else {
-      UserUrl = "http://localhost:8081/api/form-submit/createA";
-
-      requestBody = {
-        formId: 1,
-        email: email,
-        aziendaId: AziendaId,
-        settoreId: "LOGISTICA",
-        risposte: risposte,
-      };
-    }
-
-    console.log("JSON finale da inviare:");
-    console.log(JSON.stringify(requestBody, null, 2));
+    console.log("Payload formattato:", payload);
+    console.log("JSON da inviare:", JSON.stringify(payload, null, 2));
 
     try {
-      const response = await fetch(UserUrl, {
+      const url =
+        "http://localhost:8081/api/form-submit/create?form_id=1&settore_id=LOGISTICA&user_id=1";
+      const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(payload),
       });
 
-      const result = await response.text();
-      console.log("Risposta server:", result);
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Errore invio risposte: ${text}`);
+      }
 
-      setIsSubmitted(true); // ✅ Mostra schermata successo
-    } catch (error) {
-      console.error("Errore:", error);
+      console.log("Risposte inviate con successo!");
+      reset();
+      setCurrentSection(1);
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error("Errore fetch:", err);
+      alert("Errore durante l'invio. Riprova.");
     }
   };
+
   const goToNextSection = () => {
     if (currentSection < 9) {
       setCurrentSection((prev) => (prev + 1) as typeof currentSection);
@@ -161,7 +140,8 @@ export default function JobForm() {
           Candidatura Inviata con Successo!
         </h2>
         <p className="text-gray-600 mb-8">
-          Grazie per aver completato il questionario.
+          Grazie per aver completato il questionario. Riceverai una risposta
+          entro 7 giorni lavorativi.
         </p>
         <button
           onClick={() => {
@@ -170,7 +150,7 @@ export default function JobForm() {
           }}
           className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
         >
-          ritorna alla pagina home
+          Compila un Altro Questionario
         </button>
       </div>
     );
@@ -191,7 +171,7 @@ export default function JobForm() {
             <p className="text-gray-500">{getSectionTitle(currentSection)}</p>
           </div>
           <div className="flex gap-2 flex-wrap max-w-xxl">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
               <button
                 key={num}
                 type="button"
@@ -274,20 +254,11 @@ export default function JobForm() {
           )}
           {currentSection === 8 && (
             <QuizSection
-              questions={OttavoCluster}
+              questions={NonoCluster}
               register={register}
               errors={errors}
               sectionNumber={8}
               startQuestionNumber={getStartQuestionNumber(8)}
-            />
-          )}
-          {currentSection === 9 && (
-            <QuizSection
-              questions={NonoCluster}
-              register={register}
-              errors={errors}
-              sectionNumber={9}
-              startQuestionNumber={getStartQuestionNumber(9)}
             />
           )}
 

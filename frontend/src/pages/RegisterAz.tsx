@@ -16,7 +16,6 @@ import { api } from "../api";
 import { useNavigate } from "react-router-dom";
 interface RegistrationFormData {
   nome: string;
-  cognome: string;
   email: string;
   phone: string;
   password: string;
@@ -41,17 +40,15 @@ export default function RegistrationForm() {
   const onSubmit = async (data: RegistrationFormData) => {
     setError(null);
 
-    console.log("Dati registrazione:", data);
-    console.log("Nome:", data.nome);
     try {
       await api("/auth/register", {
         method: "POST",
         body: JSON.stringify({
           nome: data.nome,
-          cognome: data.cognome,
           email: data.email,
           phone: data.phone,
           password: data.password,
+          role: "azienda"
         }),
       });
       toast.success("Registrazione completata!");
@@ -88,46 +85,11 @@ export default function RegistrationForm() {
 
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="nome">Nome</Label>
-                <Input
-                  id="nome"
-                  placeholder="Mario"
-                  {...register("nome", {
-                    required: "Il nome è obbligatorio",
-                    minLength: { value: 2, message: "Minimo 2 caratteri" },
-                  })}
-                  className={errors.nome ? "border-red-500" : ""}
-                />
-                {errors.nome && (
-                  <p className="text-sm text-red-500">{errors.nome.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="cognome">Cognome</Label>
-                <Input
-                  id="cognome"
-                  placeholder="Rossi"
-                  {...register("cognome", {
-                    required: "Il cognome è obbligatorio",
-                    minLength: { value: 2, message: "Minimo 2 caratteri" },
-                  })}
-                  className={errors.cognome ? "border-red-500" : ""}
-                />
-                {errors.cognome && (
-                  <p className="text-sm text-red-500">
-                    {errors.cognome.message}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="NomeSocieta">Nome Societa</Label>
+           <div className="space-y-2">
+              <Label htmlFor="nome">Nome Societa</Label>
               <Input
-                id="NomeSocieta"
-                {...register("NomeSocieta", {
+                id="nome"
+                {...register("nome", {
                   required: "IL nome Della Societa e obbligatorio",
                 })}
                 className={errors.NomeSocieta ? "border-red-500" : ""}

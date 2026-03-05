@@ -12,6 +12,7 @@ export async function api<T = any>(path: string, options: RequestInit = {}) {
   const res = await fetch(`${BASE}${path}`, {
     ...options,
     headers,
+credentials: "include",
   });
 
   const text = await res.text();

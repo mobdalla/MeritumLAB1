@@ -40,11 +40,10 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: RegistrationFormData) => {
     setError(null);
+    const url = "/auth/register";
 
-    console.log("Dati registrazione:", data);
-    console.log("Nome:", data.nome);
     try {
-      await api("/auth/register", {
+      await api(url, {
         method: "POST",
         body: JSON.stringify({
           nome: data.nome,
@@ -52,6 +51,8 @@ export default function RegistrationForm() {
           email: data.email,
           phone: data.phone,
           password: data.password,
+          role: "candidato",
+          settore: "logistica",
         }),
       });
       toast.success("Registrazione completata!");
