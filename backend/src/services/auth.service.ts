@@ -1,15 +1,31 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User";
+import { User, UserRole } from "../models/User";
 
 export class AuthService {
-  static async register(email: string, password: string, phone: number, nome: string, congnome: string) {
+  static async register(
+    email: string,
+    password: string,
+    phone: number,
+    nome: string,
+    role: UserRole,
+    cognome: string,
+    settore: string,
+  ) {
     const exists = await User.findOne({ email });
     if (exists) throw new Error("User already exists");
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ email, password: hashed, phone, nome, congnome });
+    const user = await User.create({
+      email,
+      password: hashed,
+      phone,
+      nome,
+      role,
+      cognome,
+      settore,
+    });
     return user;
   }
 
@@ -27,5 +43,10 @@ export class AuthService {
     );
 
     return { token };
+  }
+  static async Profile(email: string) {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("Invalid email");
+    return { user };
   }
 }
