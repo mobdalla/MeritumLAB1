@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.controller";
-import { UserPunteggio } from "../controllers/auth.punteggio.ts";
-import { UserController } from "../controllers/auth.users.ts";
+import { UserPunteggio } from "../controllers/auth.punteggio";
+import { UserController } from "../controllers/auth.users";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import passport from "../passport";
 const router = Router();

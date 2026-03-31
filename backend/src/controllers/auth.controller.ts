@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthService } from "../services/auth.service.ts";
+import { AuthService } from "../services/auth.service";
 import jwt from "jsonwebtoken";
 
 export class AuthController {

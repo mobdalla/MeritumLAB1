@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserService } from "../services/auth.user.ts";
+import { UserService } from "../services/auth.user";
 import jwt from "jsonwebtoken";
 export class UserController {
   static async findAll(req: Request, res: Response) {
