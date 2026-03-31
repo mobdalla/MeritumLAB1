@@ -4,8 +4,9 @@
   "description": "Backend Node.js con TypeScript, Express e Passport",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
     "test": "jest"
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "express": "^4.17.1",
