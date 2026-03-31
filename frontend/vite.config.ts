@@ -10,9 +10,10 @@ export default defineConfig({
     },
   },
   build: {
-    sourcemap: false,  // ← Disabilita source maps in produzione
+    sourcemap: false,
   },
   server: {
-    sourcemap: false,  // ← Disabilita in sviluppo (opzionale)
-  }
+    sourcemap: false,
+  },
+  base: "/",  // ← AGGIUNGI QUESTA LINEA
 })
