@@ -4,7 +4,7 @@
   "description": "Backend Node.js con TypeScript, Express e Passport",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
     "build": "tsc",
     "start": "node dist/server.js"
   },
