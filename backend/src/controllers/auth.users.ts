@@ -4,8 +4,16 @@ import jwt from "jsonwebtoken";
 export class UserController {
   static async findAll(req: Request, res: Response) {
     try {
-
-      var users = await UserService.findCandidati();
+      const { role } = req.body;
+      var users = await UserService.findCandidati(role);
+      res.json(users);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+  static async findAllC(req: Request, res: Response) {
+    try {
+      var users = await UserService.findCandidatiC();
       res.json(users);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
@@ -15,7 +23,9 @@ export class UserController {
     try {
       const { settore } = req.query; // Ottieni il settore dai parametri di query
       if (!settore) {
-        return res.status(400).json({ error: "Il parametro 'settore' è richiesto" });
+        return res
+          .status(400)
+          .json({ error: "Il parametro 'settore' è richiesto" });
       }
 
       const users = await UserService.findBySector(settore as string);

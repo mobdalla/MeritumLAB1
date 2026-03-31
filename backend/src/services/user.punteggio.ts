@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 
 export class UserPunteggio {
-  static async updateScore(id: string, score: number) {
+  static async updateScore(id: string, score: number, role: string) {
     const filter = { _id: id };
     const update = { score: score };
     const user = await User.findOneAndUpdate(filter, update);

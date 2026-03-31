@@ -59,14 +59,14 @@ export default function JobForm() {
     }
     return count;
   };
-
   const onSubmit = async (data: FormData) => {
-    console.log("Dati ricevuti dal form:", data);
+    const userId = localStorage.getItem("userId");
+    const AziendaId = localStorage.getItem("aziendaId");
 
-    // Trasforma i dati nel formato richiesto
-    const payload = Object.entries(data)
+    //   console.log("Dati ricevuti dal form:", data);
+
+    const risposte = Object.entries(data)
       .map(([key, value]) => {
-        // Estrai l'ID numerico dalla chiave (rimuovi la "q" se presente)
         const id = key.startsWith("q") ? Number(key.substring(1)) : Number(key);
 
         return {
@@ -74,36 +74,55 @@ export default function JobForm() {
           domanda: { id: id },
         };
       })
-      .filter((item) => item.valoreText !== "" && item.valoreText !== null) // Rimuovi vuoti
-      .sort((a, b) => a.domanda.id - b.domanda.id); // Ordina per ID
+      .filter((item) => item.valoreText !== "")
+      .sort((a, b) => a.domanda.id - b.domanda.id);
 
-    console.log("Payload formattato:", payload);
-    console.log("JSON da inviare:", JSON.stringify(payload, null, 2));
+    const role = localStorage.getItem("role");
+    const email = localStorage.getItem("email");
+
+    let UserUrl = "";
+    let requestBody: any = {};
+
+    if (role === "candidato") {
+      UserUrl = "http://localhost:8081/api/form-submit/create";
+
+      requestBody = {
+        formId: 2,
+        email: email,
+        userId: userId,
+        settoreId: "RESTORANTE",
+        risposte: risposte,
+      };
+    } else {
+      UserUrl = "http://localhost:8081/api/form-submit/createA";
+
+      requestBody = {
+        formId: 2,
+        email: email,
+        aziendaId: AziendaId,
+        settoreId: "RESTORANTE",
+        risposte: risposte,
+      };
+    }
+
+    console.log("JSON finale da inviare:");
+    //  console.log(JSON.stringify(requestBody, null, 2));
 
     try {
-      const url =
-        "http://localhost:8081/api/form-submit/create?form_id=1&settore_id=LOGISTICA&user_id=1";
-      const response = await fetch(url, {
+      const response = await fetch(UserUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(requestBody),
       });
 
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Errore invio risposte: ${text}`);
-      }
+      const result = await response.text();
+      //     console.log("Risposta server:", result);
 
-      console.log("Risposte inviate con successo!");
-      reset();
-      setCurrentSection(1);
-      setIsSubmitted(true);
-    } catch (err) {
-      console.error("Errore fetch:", err);
-      alert("Errore durante l'invio. Riprova.");
+      setIsSubmitted(true); // ✅ Mostra schermata successo
+    } catch (error) {
+      console.error("Errore:", error);
     }
   };
-
   const goToNextSection = () => {
     if (currentSection < 9) {
       setCurrentSection((prev) => (prev + 1) as typeof currentSection);

@@ -30,9 +30,6 @@ const userSchema = new Schema<IUser>({
   },
   settore: {
     type: String,
-    required: function () {
-      return this.role === "candidato"; // Obbligatorio solo per il ruolo "azienda"
-    },
   },
   quiz: {
     type: Schema.Types.ObjectId,

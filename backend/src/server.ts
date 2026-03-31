@@ -3,11 +3,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
-
+import passport from "./passport";
 dotenv.config();
 
 const app = express();
-
 
 app.use(
   cors({
@@ -16,7 +15,7 @@ app.use(
   }),
 );
 app.use(express.json());
-
+app.use(passport.initialize());
 // Routes
 app.use("/auth", authRoutes);
 

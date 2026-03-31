@@ -31,25 +31,27 @@ export function Login() {
     formState: { errors, isSubmitting },
   } = useForm<LoginForm>();
   const navigate = useNavigate();
-const onSubmit = async (e: LoginForm) => {
-  try {
-    const data = await api<{ token: string; nome: string; email: string }>("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email: e.email,
-        password: e.password,
-      }),
-    });
+  const onSubmit = async (e: LoginForm) => {
+    try {
+      const data = await api<{ token: string; nome: string; email: string }>(
+        "/auth/login",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: e.email,
+            password: e.password,
+          }),
+        },
+      );
 
-
-    console.log("data dal login:", data);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("token", data.token);
-        navigate("/dashboard");
-  } catch (err: any) {
-    setError(err?.message ?? "Errore login");
-  }
-};
+      console.log("data dal login:", data);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+    } catch (err: any) {
+      setError(err?.message ?? "Errore login");
+    }
+  };
 
   /*
   const onSubmit = async (data: LoginForm) => {
@@ -144,7 +146,7 @@ const onSubmit = async (e: LoginForm) => {
               className="w-full"
               onClick={() => {
                 window.location.href =
-                  "http://localhost:8080/oauth2/authorization/google";
+                  "http://localhost:3000/auth/google";
               }}
             >
               Accedi con Google

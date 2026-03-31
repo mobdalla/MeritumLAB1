@@ -49,4 +49,21 @@ export class AuthService {
     if (!user) throw new Error("Invalid email");
     return { user };
   }
+  static async findByEmail(email: string) {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("Invalid email");
+    return { user };
+  }
+static async updateRoleSettore(email: string, role: string, settore: string) {
+  const user = await User.findOne({ email });
+
+  if (!user) throw new Error("User not found");
+
+  user.role = role;
+  user.settore = settore;
+
+  await user.save();
+
+  return user;
+}
 }

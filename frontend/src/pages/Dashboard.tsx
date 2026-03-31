@@ -79,14 +79,25 @@ const Dashboard: React.FC = () => {
     load();
   }, []);
 
-  const saveScore = async () => {
-    if (scoreInput === "") return;
-    await api<IUser>("/quiz/score", {
-      method: "PUT",
-      body: JSON.stringify({ score: scoreInput }),
-    });
-    await load();
-    setScoreInput("");
+  useEffect(() => {
+    if (activeSection === "dashboard") {
+      fetchdata();
+    }
+  }, [activeSection]);
+  const Az = localStorage.getItem("aziendaId");
+
+  const fetchdata = async () => {
+    const UserUrl = "http://localhost:8081/api/form-submit/update";
+
+    try {
+      const response = await fetch(UserUrl, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ aziendaId: Az }),
+      });
+    } catch (error) {
+      console.log("errore durante il fetch dei dati");
+    }
   };
   const tu = {
     nome: localStorage.getItem("nome"),
@@ -104,7 +115,6 @@ const Dashboard: React.FC = () => {
   };
 
   if (loading) return <p>Loading...</p>;
-
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-1 overflow-hidden">

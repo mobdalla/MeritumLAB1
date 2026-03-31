@@ -22,9 +22,9 @@ function CandidateItem({ candidate }: { candidate: Candidate }) {
         <div className="w-10 h-10 bg-white rounded-full border-2 border-gray-800 flex items-center justify-center">
           <User size={20} className="text-gray-800" />
         </div>
-        ""
+
         <span className="font-bold text-lg text-gray-900">
-          {`Candidato ${candidate.id}`}"
+          {`Candidato ${candidate.id}`}
         </span>
       </div>
 
@@ -36,15 +36,16 @@ function CandidateItem({ candidate }: { candidate: Candidate }) {
     </div>
   );
 }
-
 export function CandidatesList() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3000/auth/utenti");
-
+        const response = await fetch("http://localhost:3000/auth/utenti", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
         if (!response.ok) {
           console.log("Errore durante la fetch");
           return;
