@@ -1,5 +1,5 @@
 // src/api.ts
-const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+const BASE = import.meta.env.VITE_API_URL ?? "https://meritumlab1.onrender.com";
 
 export async function api<T = any>(path: string, options: RequestInit = {}) {
   const token = localStorage.getItem("token");
@@ -12,7 +12,7 @@ export async function api<T = any>(path: string, options: RequestInit = {}) {
   const res = await fetch(`${BASE}${path}`, {
     ...options,
     headers,
-credentials: "include",
+    credentials: "include",
   });
 
   const text = await res.text();
