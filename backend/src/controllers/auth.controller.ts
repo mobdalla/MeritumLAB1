@@ -20,24 +20,31 @@ export class AuthController {
       res.status(400).json({ error: err.message });
     }
   }
-static async completeProfile(req: Request, res: Response) {
-  try {
-    const { role, settore } = req.body;
-    const token = req.headers.authorization?.split(" ")[1];
 
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-    console.log(decoded)
-    const user = await AuthService.updateRoleSettore(
-      decoded.email,
-      role,
-      settore
-    );
+  static async completeProfile(req: Request, res: Response) {
+    try {
+      const { role, settore } = req.body;
+      const token = req.headers.authorization?.split(" ")[1];
 
-    res.json(user);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
+      // ✅ FIX riga 28: controlla che token esista prima di usarlo
+      if (!token) {
+        res.status(401).json({ error: "Token mancante" });
+        return;
+      }
+
+      const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+      console.log(decoded);
+      const user = await AuthService.updateRoleSettore(
+        decoded.email,
+        role,
+        settore
+      );
+      res.json(user);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
   }
-}
+
   static async googleCallback(req: Request, res: Response) {
     try {
       const user: any = req.user;
@@ -48,30 +55,35 @@ static async completeProfile(req: Request, res: Response) {
       const role = "candidato";
       const settore = "";
 
-      console.log(user.email)
+      console.log(user.email);
       let dbUser = await AuthService.findByEmail(user.email);
-      console.log(dbUser)
-      if(!dbUser){
-        const dbUser = await AuthService.register(
-        email,
-        "google-auth",
-        phone,
-        nome,
-        role,
-        cognome,
-        settore,
-      );
+      console.log(dbUser);
+
+      if (!dbUser) {
+        await AuthService.register(
+          email,
+          "google-auth",
+          phone,
+          nome,
+          role,
+          cognome,
+          settore,
+        );
       }
-const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: "2h" },
-    );
-    res.redirect(`http://localhost:5173/oauth-success?token=${token}`);
+
+      // ✅ FIX riga 58: dbUser potrebbe essere null, usa user.email direttamente
+      const token = jwt.sign(
+        { id: dbUser?._id ?? null, email: user.email },
+        process.env.JWT_SECRET!,
+        { expiresIn: "2h" },
+      );
+
+      res.redirect(`http://localhost:5173/oauth-success?token=${token}`);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
     }
   }
+
   static async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
@@ -81,6 +93,7 @@ const token = jwt.sign(
       res.status(400).json({ error: err.message });
     }
   }
+
   static async profile(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(" ")[1];
@@ -89,7 +102,7 @@ const token = jwt.sign(
         email: string;
       };
       console.log("decoded: ", decoded);
-      console.log("email", decoded.email)
+      console.log("email", decoded.email);
       const data = await AuthService.Profile(decoded.email);
       res.json(data);
     } catch (err: any) {

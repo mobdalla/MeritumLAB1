@@ -1,42 +1,36 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User";
+import { User, UserRole } from "../models/User"; // ✅ aggiunto UserRole
 
 export class UserService {
   static async findCandidati(role: string) {
-    const candidati = await User.find({ role: role });
-    //return candidati;
+    const candidati = await User.find({ role: role as UserRole }); // ✅ cast a UserRole
     return candidati.map((c) => ({
       id: c.id,
       punteggio: c.score,
       highlighted: false,
     }));
   }
+
   static async findBySector(settore: string) {
-    return User.find({ settore }); // Filtra gli utenti per settore
+    return User.find({ settore });
   }
-  static async findCandidatiC() {
-    const filter = { role: "candidato" };
-    const candidati = await User.find(filter);
 
-    //return candidati;
+  static async findCandidatiC() {
+    const candidati = await User.find({ role: "candidato" as UserRole }); // ✅ cast a UserRole
     return candidati.map((c) => ({
       id: c.id,
       punteggio: c.score,
       highlighted: false,
     }));
   }
-static async updateRoleSettore(email: string, role: string, settore: string) {
-  const user = await UserModel.findOne({ email });
 
-  if (!user) throw new Error("User not found");
-
-  user.role = role;
-  user.settore = settore;
-
-  await user.save();
-
-  return user;
+  static async updateRoleSettore(email: string, role: string, settore: string) {
+    const user = await User.findOne({ email }); // ✅ FIX: UserModel → User
+    if (!user) throw new Error("User not found");
+    user.role = role as UserRole; // ✅ cast a UserRole
+    user.settore = settore;
+    await user.save();
+    return user;
+  }
 }
-  // other methods...
-} // <-- make sure this closing brace exists and is in the right place
