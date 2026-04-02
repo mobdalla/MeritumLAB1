@@ -10,7 +10,7 @@ router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 router.get("/profile", AuthController.profile);
 router.post("/complete", AuthController.completeProfile);
-router.post("/score", UserPunteggio.Update);
+router.post("/score", UserPuntoController.Update);
 router.get("/utenti", UserController.findAllC);
 router.get(
   "/google",
