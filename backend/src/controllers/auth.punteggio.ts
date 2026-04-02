@@ -6,7 +6,7 @@ export class UserPuntoController { // ✅ rinominata la classe locale
   static async Update(req: Request, res: Response) {
     try {
       const { id, score, role } = req.body;
-      const user = await UserPuntoService.updateScore(id, score, role); // ✅ usa il service importato
+      const user = await UserPunteggio.updateScore(id, score, role); // ✅ usa il service importato
       res.json(user);
     } catch (err: any) {
       res.status(400).json({ error: err.message });
