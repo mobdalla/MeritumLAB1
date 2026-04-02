@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserPuntoService } from "../services/user.punteggio"; // ✅ rinominato l'import
+import { UserPunteggio } from "../services/user.punteggio"; // ✅ rinominato l'import
 import jwt from "jsonwebtoken";
 
 export class UserPuntoController { // ✅ rinominata la classe locale
