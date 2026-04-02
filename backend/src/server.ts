@@ -10,10 +10,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "https://meritum-lab-1-tjfc.vercel.app",
+    origin: "https://meritum-lab-1-tjfc.vercel.app", // ✅ dominio esatto del frontend
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+
 app.use(express.json());
 app.use(passport.initialize());
 // Routes
