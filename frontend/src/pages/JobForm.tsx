@@ -96,7 +96,7 @@ export default function JobForm() {
         risposte: risposte,
       };
     } else {
-      UserUrl = "https://meritum-backend.onrender.com/api/form-submit/createA";
+      UserUrl = "http://localhost:8081/api/form-submit/createA";
 
       requestBody = {
         formId: 1,
@@ -175,7 +175,6 @@ export default function JobForm() {
       </div>
     );
   }
-  pages / JobForm.tsx;
 
   return (
     <div className="bg-white rounded-lg shadow-xl overflow-hidden">
