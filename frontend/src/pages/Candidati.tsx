@@ -42,7 +42,7 @@ export function CandidatesList() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3000/auth/utenti", {
+        const response = await fetch("https://meritumlab1.onrender.com/auth/utenti", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
